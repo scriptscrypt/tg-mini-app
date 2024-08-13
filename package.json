@@ -11,6 +11,9 @@
   "dependencies": {
     "@dialectlabs/blinks": "^0.7.0",
     "@solana/actions": "^1.6.1",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/web3.js": "^1.95.2",
     "@types/": "dialectlabs/blinks",
     "next": "14.2.5",
