@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useMemo } from "react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { clusterApiUrl } from "@solana/web3.js";
+import React, { useMemo } from "react";
 // import { TipLinkWalletAdapter } from "@tiplink/wallet-adapter";
 import dynamic from "next/dynamic";
 

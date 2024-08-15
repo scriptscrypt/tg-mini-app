@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import SolanaWalletProvider from "@/providers/SolanaWalletProvider";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "BlinkMini",
   description: "BlinkMini - A Telegram Mini App",
 };
@@ -18,10 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="/telegram-web-app.js" defer />
+        <script src="/telegram-web-app.js" async />
       </head>
       <body className={inter.className}>
-        {" "}
         <SolanaWalletProvider>{children}</SolanaWalletProvider>
       </body>
     </html>

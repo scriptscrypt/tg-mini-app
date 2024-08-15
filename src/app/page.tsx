@@ -1,51 +1,22 @@
 "use client";
 
-import "@dialectlabs/blinks/index.css";
-import { useState, useEffect } from "react";
-import {
-  Action,
-  Blink,
-  ActionsRegistry,
-  ActionAdapter,
-} from "@dialectlabs/blinks";
-import { useAction } from "@dialectlabs/blinks";
-import { useActionSolanaWalletAdapter } from "@dialectlabs/blinks/hooks/solana";
 import { envHeliusRpcUrl } from "@/services/config/envConfig";
-
-// export default function Home() {
-//   const [tg, setTg] = useState<TelegramWebApp | null>(null);
-
-//   useEffect(() => {
-//     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-//       const tgApp = window.Telegram.WebApp;
-//       setTg(tgApp);
-//       tgApp.expand();
-
-//       tgApp.MainButton.setText("CLOSE");
-//       tgApp.MainButton.show();
-//       tgApp.MainButton.onClick(() => tgApp.close());
-//     }
-//   }, []);
-
-//   const handleClick = () => {
-//     if (tg) {
-//       tg.showAlert("You clicked the button!");
-//     }
-//   };
-
-//   return (
-//     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-//       <h1>Welcome to Sample Web App</h1>
-//       <button onClick={handleClick}>Click Me</button>
-
-//     </main>
-//   );
-// }
+import { Action, useAction } from "@dialectlabs/blinks";
+import { useActionSolanaWalletAdapter } from "@dialectlabs/blinks/hooks/solana";
+// import "@dialectlabs/blinks/index.css";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+const DynamicBlink = dynamic(
+  () => import("@dialectlabs/blinks").then((mod) => mod.Blink),
+  { ssr: false }
+);
 
 const Home = () => {
   const [action, setAction] = useState<Action | null>(null);
-  const actionApiUrl =
-    "https://blinktochat.fun/api/actions/start/-1002232395603/3Coor2Baqhi8GUZqFF3uRvd4xiCKX6XU2KbgsSVqkcbW";
+  // const actionApiUrl =
+  //   "https://blinktochat.fun/api/actions/start/-1002200926307/59qiJZ4y4hdog6LnQVqbwP8U11vFnYuhq54ScmLzwSqJ";
+  
+  const actionApiUrl = "https://alldomains.id/api/actions/letsbonk";
   const { adapter } = useActionSolanaWalletAdapter(envHeliusRpcUrl as string);
   // useAction initiates registry, adapter and fetches the action.
   const { action: actionUrl } = useAction({
@@ -53,12 +24,25 @@ const Home = () => {
     adapter,
   });
 
-  return action ? (
-    <Blink
-      action={actionUrl as Action}
-      websiteText={new URL(actionApiUrl).hostname}
-    />
-  ) : null;
+  useEffect(() => {
+    console.log("actionUrl", actionUrl);
+    if (actionUrl) {
+      setAction(actionUrl as Action);
+    }
+  }, [actionUrl]);
+
+  return (
+    <>
+      {action ? (
+        <DynamicBlink
+          action={action}
+          websiteText={new URL(actionApiUrl).hostname}
+        />
+      ) : (
+        <div>Blink is Loading</div>
+      )}
+    </>
+  );
 };
 
 export default Home;
