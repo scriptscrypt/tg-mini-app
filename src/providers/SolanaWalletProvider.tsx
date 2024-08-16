@@ -31,16 +31,6 @@ export default function SolanaWalletProvider({
 
   const wallets = useMemo(
     () => [
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      // new TipLinkWalletAdapter({
-      //     title: "13ai.dev",
-      //     clientId: envTiplinkAPIKey,
-      //     theme: "system",
-      //     installedOnAndroid: true,
-      //     installedOnIOS: true,
-      //     installedOnDesktop: true,
-      //     debug: true,
-      //   }),
       ],
         [network]
   );
