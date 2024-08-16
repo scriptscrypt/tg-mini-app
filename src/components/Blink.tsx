@@ -11,6 +11,7 @@ const DynamicBlink = dynamic(
   { ssr: false }
 );
 
+// Testing 
 const BlinkComp = () => {
   const [action, setAction] = useState<Action | null>(null);
   // const actionApiUrl =
