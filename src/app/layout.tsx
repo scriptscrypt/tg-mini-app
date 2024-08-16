@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
-        <script src="/telegram-web-app.js" async />
-      </head> */}
+      <head>
+        <script src="/telegram-web-app.js" defer />
+      </head>
       <body className={inter.className}>
         <SolanaWalletProvider>{children}</SolanaWalletProvider>
       </body>
