@@ -11,6 +11,7 @@ import React, { useMemo } from "react";
 // import { TipLinkWalletAdapter } from "@tiplink/wallet-adapter";
 import dynamic from "next/dynamic";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { CustomPhantomWalletAdapter } from "../../adapters/CustomPhantomWalletAdapter";
 
 const ReactWalletModalProvider = dynamic(
   () =>
@@ -32,9 +33,9 @@ export default function SolanaWalletProvider({
 
   const wallets = useMemo(
     () => [
-      new PhantomWalletAdapter(),
-      ],
-        [network]
+      new CustomPhantomWalletAdapter(), // Use your custom adapter here
+    ],
+    [network]
   );
 
   return (
