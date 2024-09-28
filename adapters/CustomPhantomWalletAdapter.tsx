@@ -45,6 +45,10 @@ export class CustomPhantomWalletAdapter extends BaseMessageSignerWalletAdapter {
       : WalletReadyState.NotDetected;
   }
 
+  private isMobile(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
   private isTelegramMiniApp(): boolean {
     return typeof window !== "undefined" && !!(window as any).Telegram?.WebApp;
   }
@@ -65,24 +69,71 @@ export class CustomPhantomWalletAdapter extends BaseMessageSignerWalletAdapter {
     return this._readyState;
   }
 
+  // async connect(): Promise<void> {
+  //   try {
+  //     this._connecting = true;
+
+  //     if (this.isTelegramMiniApp()) {
+  //       // Handle Telegram Mini App connection
+  //       const phantomUrl = `https://phantom.app/ul/v1/connect?app_url=${encodeURIComponent(
+  //         window.location.origin
+  //       )}`;
+  //       (window as any).Telegram.WebApp.openTelegramLink(phantomUrl);
+
+  //       // You might want to set up a way to receive the connection result
+  //       // For now, we'll just simulate a successful connection after a delay
+  //       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  //       // Simulate getting a public key (replace with actual logic when available)
+  //       this._publicKey = new PublicKey("11111111111111111111111111111111");
+  //     } else {
+  //       await this._adapter.connect();
+  //       this._publicKey = this._adapter.publicKey;
+  //     }
+
+  //     this._wallet = this._adapter;
+  //     this._readyState = WalletReadyState.Installed;
+  //     this.emit("connect", this._publicKey!);
+  //   } catch (error: any) {
+  //     this.emit("error", error);
+  //     throw error;
+  //   } finally {
+  //     this._connecting = false;
+  //   }
+  // }
+
   async connect(): Promise<void> {
     try {
       this._connecting = true;
 
-      if (this.isTelegramMiniApp()) {
-        // Handle Telegram Mini App connection
-        const phantomUrl = `https://phantom.app/ul/v1/connect?app_url=${encodeURIComponent(
-          window.location.origin
-        )}`;
-        (window as any).Telegram.WebApp.openTelegramLink(phantomUrl);
+      if (this.isMobile()) {
+        // Mobile deep link logic
+        const encodedUrl = encodeURIComponent(window.location.href);
+        const phantomUrl = `https://phantom.app/ul/v1/connect?app_url=${encodedUrl}`;
+        const deepLink = `solana-wallet:/v1/connect?app_url=${encodedUrl}`;
 
-        // You might want to set up a way to receive the connection result
+        // Try opening the deep link
+        window.location.href = deepLink;
+
+        // If deep link fails, redirect to Phantom website after a short delay
+        setTimeout(() => {
+          window.location.href = phantomUrl;
+        }, 500);
+
+        // In a real implementation, you'd need to handle the callback when the user returns to your app
         // For now, we'll just simulate a successful connection after a delay
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        this._publicKey = new PublicKey("11111111111111111111111111111111"); // Replace with actual logic
+      } else if (this.isTelegramMiniApp()) {
+        // Telegram Mini App logic
+        const phantomUrl = `https://phantom.app/ul/v1/connect?app_url=${encodeURIComponent(window.location.origin)}`;
+        (window as any).Telegram?.WebApp?.openTelegramLink(phantomUrl);
 
-        // Simulate getting a public key (replace with actual logic when available)
-        this._publicKey = new PublicKey("11111111111111111111111111111111");
+        // Simulate connection for now
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        this._publicKey = new PublicKey("11111111111111111111111111111111"); // Replace with actual logic
       } else {
+        // Desktop logic
         await this._adapter.connect();
         this._publicKey = this._adapter.publicKey;
       }
