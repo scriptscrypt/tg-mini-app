@@ -10,6 +10,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import React, { useMemo } from "react";
 // import { TipLinkWalletAdapter } from "@tiplink/wallet-adapter";
 import dynamic from "next/dynamic";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 const ReactWalletModalProvider = dynamic(
   () =>
@@ -31,6 +32,7 @@ export default function SolanaWalletProvider({
 
   const wallets = useMemo(
     () => [
+      new PhantomWalletAdapter(),
       ],
         [network]
   );
